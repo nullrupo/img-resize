@@ -11,7 +11,7 @@
     "build:mac": "electron-builder --mac",
     "build:web": "webpack --config webpack.config.js",
     "dev:web": "webpack serve --config webpack.config.js",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps && npm rebuild sharp"
   },
   "keywords": [
     "unity",
@@ -40,7 +40,7 @@
     "fs-extra": "^11.2.0",
     "glob": "^10.3.10",
     "remove-accents": "^0.5.0",
-    "sharp": "^0.33.1"
+    "sharp": "^0.33.2"
   },
   "build": {
     "appId": "com.unity.imageformatter",
@@ -51,15 +51,28 @@
     "mac": {
       "category": "public.app-category.graphics-design",
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
       ],
       "icon": "assets/icon.icns",
       "darkModeSupport": true,
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "extraResources": [
+        {
+          "from": "node_modules/sharp/vendor/",
+          "to": "sharp-vendor",
+          "filter": ["darwin-arm64"]
+        }
+      ]
     },
     "win": {
       "target": "portable",
