@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bộ Định Dạng Ảnh Cho Unity</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="title-bar">
+        Bộ Định Dạng Ảnh Cho Unity
+    </div>
+    
+    <div class="content-area">
+        <div class="drop-area" id="dropArea">
+            <img src="assets/upload-icon.svg" alt="Upload" width="48" height="48">
+            <div class="explicit-file-btn" id="explicitFileBtn">Chọn file</div>
+            <div class="file-info">
+                <div class="file-counter hidden" id="fileCount">0 files</div>
+                <button class="clear-all-btn hidden" id="clearAllBtn">Xóa tất cả</button>
+            </div>
+            <input type="file" id="fileInput" class="file-input" multiple accept=".png,.jpg,.jpeg,.psd,.pdf,.ai">
+            <div class="processing-animation" id="processingAnimation"></div>
+        </div>
+
+        <div class="file-list" id="fileList"></div>
+
+        <div class="settings-area">
+            <div class="settings-group">
+                <label for="suffixInput">Hậu tố:</label>
+                <input type="text" id="suffixInput" value="_u" placeholder="Nhập hậu tố">
+                
+                <label for="formatSelect">Định dạng:</label>
+                <select id="formatSelect">
+                    <option value="original">Giữ nguyên</option>
+                    <option value="png">PNG</option>
+                    <option value="jpg">JPG</option>
+                </select>
+            </div>
+            
+            <div class="settings-group">
+                <span id="folderPath" class="folder-path">Chọn thư mục xuất</span>
+            </div>
+
+            <button id="outputFolderBtn" class="output-folder-btn">
+                Chọn thư mục
+            </button>
+        </div>
+
+        <div class="status-area">
+            <div id="statusText" class="status-text">Trạng thái: Sẵn sàng</div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <button id="processBtn" class="process-btn">Xử lý</button>
+    </div>
+
+    <div id="completionModal" class="completion-modal">
+        <div class="modal-content">
+            <div id="completionMessage" class="modal-message"></div>
+            <div class="modal-buttons">
+                <button id="openFolderBtn" class="modal-btn open-folder-btn">Mở thư mục</button>
+                <button id="closeModalBtn" class="modal-btn close-modal-btn">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
