@@ -11,7 +11,7 @@
     "build:mac": "electron-builder --mac",
     "build:web": "webpack --config webpack.config.js",
     "dev:web": "webpack serve --config webpack.config.js",
-    "postinstall": "electron-builder install-app-deps && npm rebuild sharp"
+    "postinstall": "electron-builder install-app-deps && npm rebuild sharp --platform=darwin --arch=arm64"
   },
   "keywords": [
     "unity",
@@ -66,11 +66,16 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "extraResources": [
+      "extraFiles": [
         {
-          "from": "node_modules/sharp/vendor/",
-          "to": "sharp-vendor",
-          "filter": ["darwin-arm64"]
+          "from": "${sourcePath}/node_modules/sharp/build/Release/",
+          "to": "Resources/sharp",
+          "filter": ["*.node"]
+        },
+        {
+          "from": "${sourcePath}/node_modules/sharp/vendor/",
+          "to": "Resources/sharp/vendor",
+          "filter": ["*.node", "*.dylib"]
         }
       ]
     },
