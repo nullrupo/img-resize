@@ -15,10 +15,16 @@ jobs:
       fail-fast: false
         
     runs-on: ${{ matrix.os }}
+    
+    permissions:
+      contents: write
+      packages: write
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -29,14 +35,20 @@ jobs:
     - name: Install dependencies
       run: |
         npm ci
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Build Electron app for Windows
       if: matrix.os == 'windows-latest'
       run: npm run build:win
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Build Electron app for macOS
       if: matrix.os == 'macos-latest'
       run: npm run build:mac
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Upload Windows artifacts
       if: matrix.os == 'windows-latest'
@@ -60,6 +72,8 @@ jobs:
         
     - name: Build Web Version
       run: npm run build:web
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Upload Web artifacts
       uses: actions/upload-artifact@v4
