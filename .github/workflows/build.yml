@@ -12,35 +12,58 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest]
+      fail-fast: false
         
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
+        cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
-      
-    - name: Build Electron app
       run: |
-        if [ "${{ matrix.os }}" = "windows-latest" ]; then
-          npm run build:win
-        else
-          npm run build:mac
-        fi
-      shell: bash
-        
-    - name: Upload artifacts
+        npm ci
+      
+    - name: Build Electron app for Windows
+      if: matrix.os == 'windows-latest'
+      run: npm run build:win
+      
+    - name: Build Electron app for macOS
+      if: matrix.os == 'macos-latest'
+      run: npm run build:mac
+      
+    - name: Upload Windows artifacts
+      if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.os }}-build
+        name: windows-build
         path: |
           dist/*.exe
+          dist/win-unpacked/
+        if-no-files-found: error
+        
+    - name: Upload macOS artifacts
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-build
+        path: |
           dist/*.dmg
-          dist/*.zip
-        if-no-files-found: ignore 
+          dist/mac/
+        if-no-files-found: error
+        
+    - name: Build Web Version
+      run: npm run build:web
+      
+    - name: Upload Web artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.os }}-web
+        path: dist/web/
+        if-no-files-found: error 
