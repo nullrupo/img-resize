@@ -65,11 +65,7 @@
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist",
-      "files": [
-        "node_modules/sharp/build/Release/*.node",
-        "node_modules/sharp/vendor/**/*"
-      ]
+      "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "win": {
       "target": "portable",
@@ -106,7 +102,19 @@
       "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
-      "!web/**/*"
+      "!web/**/*",
+      "!**/node_modules/sharp/vendor/{win32,linux}/**/*",
+      "!**/node_modules/sharp/vendor/darwin/**/x64/*",
+      "!**/node_modules/sharp/build/Release/*.{lib,exp,map}",
+      "!**/node_modules/sharp/build/{docs,lib,Release/obj}/**/*",
+      "!**/node_modules/sharp/{src,test,docs,coverage}/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "node_modules/sharp/vendor/darwin",
+        "to": "vendor/darwin",
+        "filter": ["arm64/**/*"]
+      }
     ],
     "asar": true,
     "compression": "maximum",
